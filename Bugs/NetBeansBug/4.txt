@@ -1,0 +1,8 @@
+class SourceClass{
+ private SourceClass(){
+}
+public void methodToBeMoved(TargetClass targetClass){
+    SourceClass sourceClass = new SourceClass();
+}
+}
+class TargetClass{}

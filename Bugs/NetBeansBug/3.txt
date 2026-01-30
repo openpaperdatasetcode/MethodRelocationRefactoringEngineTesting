@@ -1,0 +1,10 @@
+class SourceClass{
+ class InnerClass{
+    void innerMethod(){}
+}
+public void methodToBeMoved(TargetClass targetClass){
+    InnerClass innerClass = new InnerClass();
+    innerClass.innerMethod();
+}
+}
+class TargetClass{}

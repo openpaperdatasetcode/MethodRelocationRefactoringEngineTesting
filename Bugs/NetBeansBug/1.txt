@@ -1,0 +1,8 @@
+class SourceClass{
+public void methodToBeMoved(TargetClass targetClass){
+    calledMethod();
+}
+private void calledMethod(){
+}
+}
+class TargetClass{}

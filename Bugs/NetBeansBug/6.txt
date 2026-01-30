@@ -1,0 +1,15 @@
+class SourceClass {
+    
+    interface InnerInterface{
+        void innerMethod();
+    }
+    public void methodToBeMoved(TargetClass targetClass) {
+        InnerInterface innerInterface = new InnerInterface(){
+            @Override
+            public void innerMethod() {
+                throw new UnsupportedOperationException("Not supported yet.");}
+        };
+    }
+
+}
+class TargetClass{}
