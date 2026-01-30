@@ -1,0 +1,12 @@
+P1 The members to be moved must not be declared in java.lang.Object.
+P2 The source and target classes must not be binary or read-only.
+P3 Static methods cannot be pushed down into an interface.
+P4 The method body must not contain references within anonymous classes or local type declarations.
+P5 The method must not use "this" as an argument where the required type is incompatible with the target subclass.
+P6 The method must not reference members of the superclass that are inaccessible from the target subclass.
+P7 The method must not reference members that require a new parameter to be added if the parameter mapping is missing.
+P8 The method body must not contain "super" references that become invalid in the target subclass context.
+P9 The target subclass must not contain a method or field with a conflicting signature or name.
+P10 Members cannot be moved across package boundaries if it results in visibility violations.
+P11 The method must not reference private members of the superclass that are not also being pushed down.
+P12 The destination type must be a valid, existing subtype of the declaring class.

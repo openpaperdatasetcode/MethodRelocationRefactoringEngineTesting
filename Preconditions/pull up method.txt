@@ -1,0 +1,18 @@
+P1 The members to be moved must not be declared in java.lang.Object.
+P2 The destination type and required supertypes must not be binary (compiled) or read-only.
+P3 Static methods cannot be pulled up into an interface.
+P4 The method body must not contain references to members that are inaccessible from the destination type.
+P5 The method body must not contain references within anonymous classes or local type declarations.
+P6 The method must not contain super method invocations that cannot be resolved within the target type's hierarchy.
+P7 The method must not use this as an argument where the required parameter type is incompatible with the destination type binding.
+P8 A static method must not reference non-static members of its current declaring class.
+P9 Any type variables (generics) referenced in the method must be available or mappable in the destination supertype.
+P10 The destination type must not already contain a method with a conflicting signature.
+P11 The refactoring must not result in lower visibility for a method that is already part of an inheritance chain (e.g., reducing public to protected).
+P12 The method must not reference members that require a new parameter to be added if the required argument mapping is missing.
+P13 Referenced type names must not become shadowed or ambiguous in the target type's package context.
+P14 The method must not reference members through skipped supertypes if those members are hidden in the target hierarchy.
+P15 If abstract methods are pulled up, the destination class must be declared abstract or be an interface.
+P16 The method must not reference package-private members if the destination type resides in a different package.
+P17 The method must not contain this or super references within a code range restricted by the AST rewriter.
+P18 If the destination is an interface, the method to be moved must not reference any non-public elements.
