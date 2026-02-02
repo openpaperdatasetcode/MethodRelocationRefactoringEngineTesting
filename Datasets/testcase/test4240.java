@@ -1,0 +1,12 @@
+package test;
+import java.util.List;import java.util.ArrayList;import java.util.Objects;
+// Source record: public modifier, same package with target, has two local inner classespublic record SourceRecord(String sourceComponent) {// Member inner class (for method_position: source_inner)public class SourceInner {// Constructor as refactored method (matches method.type: constructor)public SourceInner(TargetRecord targetParam) {// NullPointerException (matches method.features)Objects.requireNonNull(targetParam, "TargetRecord cannot be null");
+// VariableDeclarationStatement (private modifier, super.field, "2")// super.field: accesses SourceRecord's component via outer thisprivate String superField1 = SourceRecord.this.sourceComponent();private String superField2 = targetParam.targetComponent(); // 2 variables total
+// Variable call: access target's inner class (matches target class: target_inner_rec)TargetRecord.TargetInner targetInner = targetParam.new TargetInner();targetInner.recursiveMethod(3);
+// Collect results (aligns with return_type: List<String>)List<String> result = new ArrayList<>();result.add(superField1);result.add(superField2);result.add(targetInner.getInnerData());}
+// Method with 1st local inner class (matches source_class.feature)public void methodWithFirstLocal() {class FirstLocalInner {void printData() {System.out.println(SourceRecord.this.sourceComponent());}}new FirstLocalInner().printData();}
+// Method with 2nd local inner class (matches source_class.feature)public void methodWithSecondLocal() {class SecondLocalInner {void printTargetData(TargetRecord target) {System.out.println(target.targetComponent());}}new SecondLocalInner().printTargetData(new TargetRecord("test"));}}}
+// Target record: protected modifier, has anonymous inner class (target_feature)protected record TargetRecord(String targetComponent) {// Target inner class (matches target class: target_inner_rec, "rec" = recursive)public class TargetInner {private String innerData;
+// Recursive method (matches "rec" in target_inner_rec)public void recursiveMethod(int count) {if (count <= 0) {this.innerData = "RecursionEnd";return;}this.innerData = "Count_" + count;recursiveMethod(count - 1);}
+// Getter for variable callpublic String getInnerData() {return innerData;}}
+// Anonymous inner class (matches target_class.target_feature)private Runnable targetAnon = new Runnable() {@Overridepublic void run() {System.out.println("TargetRecord Anonymous: " + targetComponent());}};}

@@ -1,0 +1,14 @@
+package refactor.test;
+import java.util.function.Consumer;
+// Implemented interface for source classinterface DataProcessor<T> {void process(T data);}
+// Source class: generic, protected modifier, same package as target, with required featuresprotected class SourceClass<T extends Number> implements DataProcessor<T> {// Static nested class (required source feature)static class SourceStaticNested {// Static field for depends_on_static_field featurepublic static int MAX_PROCESS_TIMES = 3;}
+// Member inner class (required source feature)class SourceMemberInner {void assistProcess(T data) {System.out.println("Assisting process: " + data);}}
+// Method to refactor: varargs type, default access, in source class, meets all featuresvoid processVarargs(PrivateTargetClass<T>... targetParams) {// method types parameter is:none (no extra type parameters beyond varargs)// Variable call: use source's static nested class fieldint maxTimes = SourceStaticNested.MAX_PROCESS_TIMES;SourceMemberInner inner = new SourceMemberInner();
+// Switch statement (required feature)switch (targetParams.length) {// Switch case (required feature)case 0:// NullPointerException (required feature: explicit throw for empty varargs)throw new NullPointerException("Target parameter array cannot be empty");case 1:// Variable call: use target class parameterPrivateTargetClass<T> target = targetParams[0];target.execute(data -> inner.assistProcess(data));break;default:// Variable call: loop through target varargs parametersfor (PrivateTargetClass<T> param : targetParams) {if (maxTimes-- <= 0) break;param.execute(data -> System.out.println("Batch process: " + data));}break;}// no_new_exception (no additional exceptions thrown beyond specified NullPointerException)}
+// Implement method from DataProcessor (interface requirement)@Overridepublic void process(T data) {System.out.println("Base process: " + data);}}
+// Target class: generic, private modifier, with anonymous inner class (required target feature)private class PrivateTargetClass<T extends Number> {private T data;
+public PrivateTargetClass(T data) {this.data = data;}
+// Method used by source class's refactored methodpublic void execute(Consumer<T> consumer) {// Anonymous inner class (required target feature)Runnable task = new Runnable() {@Overridepublic void run() {consumer.accept(data);}};task.run();}
+public T getData() {return data;}}
+// Test class to verify pre-refactoring functionality (meets per-condition)public class MoveMethodTest {public static void main(String[] args) {// Per-condition: refactored method contains target class parameterPrivateTargetClass<Integer> target1 = new PrivateTargetClass<>(10);PrivateTargetClass<Integer> target2 = new PrivateTargetClass<>(20);SourceClass<Integer> source = new SourceClass<>();
+// Execute refactored method with target parameterssource.processVarargs(target1, target2);}}

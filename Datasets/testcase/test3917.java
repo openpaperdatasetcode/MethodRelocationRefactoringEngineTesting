@@ -1,0 +1,21 @@
+package refactor.test;
+import java.lang.reflect.Method;
+// Parent interface for abstract method and overriding featureinterface Refactorable {Object process(Object data);}
+// Source class: public record, same package as target, with 2 member inner classespublic record SourceRecord(String sourceField) implements Refactorable {// 1st Member inner class (required source feature)public class FirstSourceInner {// 2nd Member inner class (recursive inner: source_inner_rec, method position)public class SecondSourceInner implements Refactorable {// Abstract method (matches "abstract type", "3" (used 3x), "inner_class" feature)public abstract FinalTargetRecord.TargetInner abstractInnerMethod(FinalTargetRecord target, int param1, int param2, int param3);
+// Method to refactor: overriding, Object return, private access, in source_inner_rec@Overrideprivate Object process(Object data) {// Type declaration statement (required feature)class LocalType {}LocalType local = new LocalType();
+// Check for null (NullPointerException feature)if (!(data instanceof FinalTargetRecord target)) {throw new NullPointerException("Data must be FinalTargetRecord instance");}
+// Variable call: access target's field (meets per-condition)String targetField = target.targetField();System.out.println("Source accesses target field: " + targetField);
+// Constructor invocation: create target's inner class instanceFinalTargetRecord.TargetInner targetInner = target.new TargetInner();
+// Enhanced for statement (required feature)String[] items = {"item1", "item2", "item3"};for (String item : items) {targetInner.setInnerData(item);}
+// Access instance method (required feature: call target inner's instance method)String innerData = targetInner.getInnerData();
+// Used by reflection: invoke abstract method (required feature)try {Method abstractMethod = SecondSourceInner.class.getMethod("abstractInnerMethod", FinalTargetRecord.class, int.class, int.class, int.class);FinalTargetRecord.TargetInner reflectedResult = (FinalTargetRecord.TargetInner)abstractMethod.invoke(this, target, 1, 2, 3);
+// ReturnStatement: returns target's inner field (matches "obj.field:1" feature)return reflectedResult.getInnerData().length() > 0 ? reflectedResult : targetInner;} catch (Exception e) {// No new exception (propagate reflection exceptions without adding new types)throw new RuntimeException(e);}}}}
+// Access instance method: create inner class chain (required feature)public FirstSourceInner.SecondSourceInner createInnerRecursive() {return new FirstSourceInner().new SecondSourceInner() {// Implement abstract method (matches "ClassName.methodName(arguments)" feature)@Overridepublic FinalTargetRecord.TargetInner abstractInnerMethod(FinalTargetRecord target, int param1, int param2, int param3) {// Exception throwing statements (pos: exception throwing statements)if (param1 + param2 + param3 != 6) {throw new IllegalArgumentException("Sum of params must be 6");}return target.new TargetInner();}};}}
+// Target class: final record, with anonymous inner class (required target feature)public final record FinalTargetRecord(String targetField) {// Member inner class (used by source)public class TargetInner {private String innerData;
+public void setInnerData(String innerData) {this.innerData = innerData;}
+public String getInnerData() {return innerData;}}
+// Anonymous inner class (required target_feature)private final Runnable anonymousTask = new Runnable() {@Overridepublic void run() {System.out.println("Target's anonymous inner class runs: " + targetField);}};
+// Method to trigger anonymous inner classpublic void executeAnonymousTask() {anonymousTask.run();}}
+// Test class to verify pre-refactoring functionalitypublic class MoveMethodRecordTest {public static void main(String[] args) {// Per-condition: source contains target's field (targetField accessed in SourceRecord)FinalTargetRecord target = new FinalTargetRecord("test-target-field");SourceRecord source = new SourceRecord("test-source-field");SourceRecord.FirstSourceInner.SecondSourceInner sourceInnerRec = source.createInnerRecursive();
+// Execute refactored methodObject result = sourceInnerRec.process(target);System.out.println("Refactored method result: " + result);
+// Trigger target's anonymous inner classtarget.executeAnonymousTask();}}

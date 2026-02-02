@@ -1,0 +1,18 @@
+package test.refactor.movemethod;
+import java.util.Arrays;import java.util.List;
+// Target class (public modifier, no additional features)public class TargetClass {public String targetField = "targetFieldValue";}
+// Different package class for "diff_package_others" positionpackage test.other;import test.refactor.movemethod.TargetClass;
+public class DiffPackageClass {public static void processTarget(TargetClass target) {// Used for VariableDeclarationStatement position}}
+// Source class (default modifier, same package with target)package test.refactor.movemethod;import test.other.DiffPackageClass;
+class SourceClass {// Member inner class (source feature)class MemberInnerClass {public int callInnerMethod(TargetClass target) {int count = 0;// Call method position: while loopwhile (count < 3) {// Target_feature: constructor + ClassName.methodName(arguments)SourceClass source = new SourceClass();Object result = source.overloadingMethod(target, count);count++;}return count;}}
+// Static nested class (source feature)static class StaticNestedClass {public static int invokeOverloadingMethod(TargetClass target) {SourceClass source = new SourceClass();return new SourceClass.MemberInnerClass(source).callInnerMethod(target);}}
+// Overloading method 1 (main method to refactor)private Object overloadingMethod(TargetClass targetParam, int num) {// VariableDeclarationStatement (private modifier, pos: diff_package_others, target_feature: obj.field + 1)private TargetClass obj = new TargetClass();DiffPackageClass.processTarget(obj); // Position: diff_package_othersobj.targetField = targetParam.targetField; // obj.field (count 1)
+// Enhanced for statementList<String> list = Arrays.asList("item1", "item2");for (String item : list) {// Variable call (access target parameter's field)System.out.println(targetParam.targetField + "_" + item);}
+// No new exception thrownreturn obj;}
+// Overloading method 2 (overload exists)private Object overloadingMethod(TargetClass targetParam, String str) {return targetParam.targetField + "_" + str;}}
+// Test classimport org.junit.Test;import static org.junit.Assert.*;import java.lang.reflect.Method;import test.refactor.movemethod.SourceClass;import test.refactor.movemethod.TargetClass;import test.refactor.movemethod.SourceClass.MemberInnerClass;import test.refactor.movemethod.SourceClass.StaticNestedClass;
+public class MoveMethodRefactoringTest5355 {@Testpublic void testMoveMethodRefactoring() throws Exception {SourceClass source = new SourceClass();TargetClass target = new TargetClass();MemberInnerClass inner = source.new MemberInnerClass();
+// Test inner class method callint innerResult = inner.callInnerMethod(target);assertEquals(3, innerResult);
+// Test static nested class method callint staticNestedResult = StaticNestedClass.invokeOverloadingMethod(target);assertEquals(3, staticNestedResult);
+// Test overloading methods via reflectionMethod method1 = SourceClass.class.getDeclaredMethod("overloadingMethod", TargetClass.class, int.class);method1.setAccessible(true);Object result1 = method1.invoke(source, target, 1);assertNotNull(result1);assertEquals(target.targetField, ((TargetClass) result1).targetField);
+Method method2 = SourceClass.class.getDeclaredMethod("overloadingMethod", TargetClass.class, String.class);method2.setAccessible(true);Object result2 = method2.invoke(source, target, "test");assertEquals(target.targetField + "_test", result2);}}

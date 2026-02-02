@@ -1,0 +1,5 @@
+ class SourceClass {
+     TargetClass t;
+     void methodToBeMoved(SourceClass this) {}
+}
+class TargetClass{}

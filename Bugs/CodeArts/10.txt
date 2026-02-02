@@ -1,0 +1,6 @@
+class SourceClass {
+    TargetClass t;
+    void m(SourceClass this) {}
+        }
+
+class TargetClass{}

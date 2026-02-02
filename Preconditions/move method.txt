@@ -1,0 +1,23 @@
+P1 & The program contains no syntax errors. & \multirow{9}{=}{\raggedright Common Conditions} \\
+    P2 & The program is not a binary file. & \\
+    P3 & The program is not read-only. & \\
+    P4 & The method to be moved is not a constructor. & \\
+    P5 & The method to be moved is not static. & \\
+    P6 & The method to be moved must either have at least one parameter of the target class type, or its enclosing class must have at least one field of the target class type. & \\
+    P7 & The method must be an instance method. & \\
+    P8 & The method to be moved exists. & \\
+    P9 & The body of the method to be moved is valid. & \\
+    
+    \midrule
+    P10 & The method to be moved is not abstract. & \multirow{12}{=}{\raggedright Special Conditions} \\
+    P11 & The method to be moved is not a native method. & \\
+    P12 & The method to be moved is not synchronized. & \\
+    P13 & The enclosing type of the method to be moved is not an annotation. & \\
+    P14 & The enclosing type of the method is not an interface method without a default implementation. & \\
+    P15 & The method body does not contain references to super. & \\
+    P16 & The method body does not contain recursion. & \\
+    P17 & The method body does not contain non-static inner classes. & \\
+    P18 & The method body must not access the enclosing instance of an outer class. & \\
+    P19 & There are no illegal references in generics. & \\
+    P20 & The target class does not contain a method with a conflicting signature. & \\
+    P21 & The method must not reference type bindings in the target class that resolve to non-type variables. & \\

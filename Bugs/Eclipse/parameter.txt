@@ -1,0 +1,6 @@
+class Test {
+    TargetClass t;
+    void m(Test this) {}
+        }
+
+class TargetClass{}

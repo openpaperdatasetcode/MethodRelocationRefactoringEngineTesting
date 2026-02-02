@@ -1,0 +1,13 @@
+package test.refactoring.movemethod;
+// Parent class for varargs method call (method_feature: parent_class)class ParentClass {public TargetClass processVarargs(String... args) {return new TargetClass();}}
+// Others class for call_method (type: others_class)class OthersClass extends ParentClass {// Protected modifier (call_method.modifier: protected), return_type: Objectprotected Object callInTernary(boolean flag) {// pos: ternary operators (call_method.pos)return flag ? super.processVarargs("arg1") : new Object(); // target_feature: super.methodName()}}
+// Source final class (modifier: final, same package, permits TargetClass)final class SourceClass permits TargetClass {private String instanceField = "source_field";
+// Member inner class (source_class feature)class SourceMemberInner {// Local inner class (source_class feature)void hostLocalInner() {class SourceLocalInner {void useConstructor() {// Private ConstructorInvocation in inner class (pos: inner class)private TargetClass.TargetStaticNested nested1 = new TargetClass.TargetStaticNested("field1");private TargetClass.TargetStaticNested nested2 = new TargetClass.TargetStaticNested("field2");private TargetClass.TargetStaticNested nested3 = new TargetClass.TargetStaticNested("field3");// target_feature: obj.field (3 instances)System.out.println(nested1.field + nested2.field + nested3.field);}}new SourceLocalInner().useConstructor();}}
+// Normal method to be refactored (method.type: normal, access_modifier: default)void refactorMethod(TargetClass targetParam) { // contains target parameter (per_condition)// Access instance field (method.features)String fieldValue = this.instanceField;
+// Variable call (method.features)TargetClass.TargetStaticNested targetNested = targetParam.new TargetStaticNested("var_call");String nestedField = targetNested.field;
+// Enhanced for statement (method.features)String[] items = {fieldValue, nestedField};for (String item : items) {System.out.println(item);}
+// Public varargs method call in if/else conditions (method.features)ParentClass parentInstance = new ParentClass();TargetClass varargsResult;if (items.length > 0) {varargsResult = parentInstance.processVarargs(items); // instanceReference.methodName(arguments)} else {varargsResult = parentInstance.processVarargs("default");}
+// No new exception (method.features)assert varargsResult != null;}}
+// Target public class (modifier: public, same package)public class TargetClass {// Static nested class (target_feature)static class TargetStaticNested {String field;
+public TargetStaticNested(String field) {this.field = field;}}
+// Factory method for static nested class instancepublic TargetStaticNested new TargetStaticNested(String field) {return new TargetStaticNested(field);}}

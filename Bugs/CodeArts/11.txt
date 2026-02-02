@@ -1,0 +1,18 @@
+class ParentClass {
+    void parentMethod() {
+        System.out.println(" parentMethod");
+    }
+}
+class SourceClass extends ParentClass {
+    void methodToBeMoved(TargetClass target) {
+        super.parentMethod(); 
+    }
+    public static void main(String[] args) {
+        SourceClass sc = new SourceClass();
+        TargetClass tc = new TargetClass();
+        sc.methodToBeMoved(tc);
+    }
+}
+
+class TargetClass {
+}

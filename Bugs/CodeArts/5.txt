@@ -1,0 +1,10 @@
+class SuperClass{
+   public static void method(){}
+}
+class SourceClass extends SuperClass{
+    public void methodToBeMoved(TargetClass targetClass) {
+        super.method();
+    }
+
+}
+class TargetClass{}

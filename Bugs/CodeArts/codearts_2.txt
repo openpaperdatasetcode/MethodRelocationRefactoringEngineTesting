@@ -1,0 +1,15 @@
+class A
+{
+    void X()
+    {
+    }
+}
+
+class B extends A
+{
+    A a;
+    void Y()
+    {
+        super.X();
+    }
+}

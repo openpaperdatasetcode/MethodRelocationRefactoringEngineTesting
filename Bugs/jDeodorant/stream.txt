@@ -1,0 +1,26 @@
+import java.util.ArrayList;
+
+import javax.print.attribute.standard.Destination;
+
+import static java.util.stream.Collectors.toList;
+public class SourceClass {
+	TargetClass t;
+	    private static class Config { }
+	    
+	    private final Config config = new Config();
+	    
+	    public void processData(TargetClass tarClass) {
+	        new ArrayList<Integer>().stream().filter(this::isPositive).collect(toList());
+	        tarClass.m();
+	    }
+	    
+	    private boolean isPositive(Integer number) {
+	        return number != null && number > 0;
+	    }
+	    
+
+}
+public class TargetClass {
+
+public void m() {}
+}

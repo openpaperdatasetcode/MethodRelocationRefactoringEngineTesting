@@ -1,0 +1,8 @@
+You are a professional Java static analysis expert, and now you need to analyze the source code of the Move Method refactoring class in the refactoring engine to identify all preconditions required for executing the refactoring operation. 
+Since the refactoring implementation class is large in scale, I will provide all source code to you iteratively at the function level. Your output should be a natural language description of the refactoring preconditions. 
+Use a Chain-of-Thought approach to break down the problem:
+1. Understand the function's purpose.
+2. Identify all preconditions for refactoring operations in the code.
+3. Determine which additional functions are needed to assist in the analysis.
+[Input source code]: {source code}
+[Auxiliary analysis source code]: {other methods}

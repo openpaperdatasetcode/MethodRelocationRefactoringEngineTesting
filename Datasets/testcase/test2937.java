@@ -1,0 +1,4 @@
+import java.util.Objects;
+interface SourceInterface extends Runnable {class MemberInner {static TargetInterface methodToMove(TargetInterface... targets) {private class VarHelper {int field1;int field2;void init() {this.field1 = 2;this.field2 = 2;}}VarHelper helper = new VarHelper();helper.init();
+if (targets.length > 0) {TargetInterface.StaticNested nested = targets[0].new StaticNested();Object obj = nested.m1().m2().m3();System.out.println(obj);} else {Object nullObj = null;}return targets[0];}}static class StaticNested {}}
+interface TargetInterface {static class StaticNested {StaticNested m1() { return this; }StaticNested m2() { return this; }Object m3() { return null; }}}

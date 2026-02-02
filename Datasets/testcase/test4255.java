@@ -1,0 +1,15 @@
+package test;
+import java.io.IOException;import java.util.ArrayList;import java.util.List;import java.util.function.Supplier;
+// Source class: generic, with 2 anonymous inner classespublic class SourceClass<T extends TargetClass> {// Source contains target field (matches per_condition)private T targetField = (T) new TargetClass();
+// 1st anonymous inner class (source_class feature)Runnable anon1 = new Runnable() {@Overridepublic void run() {try {new SourceInner().recursiveGetTarget(3);} catch (IOException e) {e.printStackTrace();}}};
+// 2nd anonymous inner class (source_class feature)Supplier<T> anon2 = new Supplier<T>() {@Overridepublic T get() {try {return new SourceInner().recursiveGetTarget(2);} catch (IOException e) {return null;}}};
+// Member inner class (for "source_inner" method position)class SourceInner {// Recursive method to be refactored@Deprecated // has_annotation featureprotected T recursiveGetTarget(int depth) throws IOException {if (depth <= 0) {return targetField;}
+// 3 VariableDeclarationStatement with "super.field" (matches target_feature)public int field1 = targetField.superField1; // target inherits from ParentTargetpublic int field2 = targetField.superField2;public int field3 = targetField.superField3;
+// With bounds (generic bounds: T extends TargetClass)T boundedTarget = targetField;
+// Labeled statement + Do statementLabeledBlock: {do {// Variable call: access target inner class methodboundedTarget.innerClass.updateField(field1);depth--;} while (depth > 1);break LabeledBlock;}
+// Recursionreturn recursiveGetTarget(depth);}}}
+// Target class: strictfp, extends parent, with member inner classstrictfp class TargetClass extends ParentTarget {// Member inner class (target_class feature)TargetInner innerClass = new TargetInner();
+// Super constructor invocation (implicit: calls ParentTarget constructor)public TargetClass() {super();}
+class TargetInner {void updateField(int val) {TargetClass.this.superField1 = val; // access super field via outer}}}
+// Parent class for target "extends" featureclass ParentTarget {// Super fields (used in VariableDeclarationStatement)protected int superField1 = 10;protected int superField2 = 20;protected int superField3 = 30;}
+// call_method implementation (inner_class type)class CallerClass {public List<String> callRecursive(SourceClass<TargetClass> source) {// Lambda expressions (matches "pos": "Lambda expressions")Supplier<List<String>> lambda = () -> {SourceClass<TargetClass>.SourceInner inner = source.new SourceInner();try {// this.methodName(arguments) + constructor call (inner class constructor)TargetClass target = inner.recursiveGetTarget(3);List<String> result = new ArrayList<>();result.add(String.valueOf(target.superField1));return result;} catch (IOException e) {return new ArrayList<>();}};return lambda.get();}}

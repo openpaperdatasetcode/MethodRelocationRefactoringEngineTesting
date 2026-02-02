@@ -1,0 +1,4 @@
+You are a code analysis tool. Compare the following two code snippets for semantic equivalence. Ignore formatting and variable renaming. Focus on logic and execution results.
+[Original code]: {original_code}
+[Refactored code]: {refactored_code}
+Are they equivalent? Answer strictly with "YES" or "NO".

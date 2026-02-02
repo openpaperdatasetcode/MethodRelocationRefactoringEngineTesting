@@ -1,0 +1,9 @@
+import java.lang.annotation.Retention;import java.lang.annotation.RetentionPolicy;import java.util.ArrayList;import java.util.List;
+@Retention(RetentionPolicy.RUNTIME)@interface RefactorTest {}
+class ParentSource {protected Object method1(TargetClass target) { return target; }protected Object method2(TargetClass target, String arg) { return target; }protected Object method3(TargetClass target, int arg) { return target; }}
+private class SourceClass extends ParentSource {@RefactorTeststrictfp Object process(TargetClass target) {try {// Local inner classclass LocalInner {TargetClass createInner(TargetClass outer) {return outer.new MemberInner().overloadMethod();}}
+// Anonymous inner classRunnable r = new Runnable() {public void run() {target.new MemberInner().overloadMethod("anonymous");}};
+// Raw type usageList rawList = new ArrayList();rawList.add(target);
+// 3 overloaded super method calls (constructor parameter list pos)Object[] array = {new LocalInner().createInner((TargetClass) super.method1(target)),new LocalInner().createInner((TargetClass) super.method2(target, "param")),new LocalInner().createInner((TargetClass) super.method3(target, 100))};
+// Variable call + target inner class overloadTargetClass.MemberInner inner = target.new MemberInner();return inner.overloadMethod(10, array);} catch (Exception e) {return null;}}}
+class TargetClass {class MemberInner {// Overloaded methodsTargetClass overloadMethod() { return TargetClass.this; }TargetClass overloadMethod(String arg) { return TargetClass.this; }TargetClass overloadMethod(int num, Object[] arr) { return TargetClass.this; }}}

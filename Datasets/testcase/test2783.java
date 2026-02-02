@@ -1,0 +1,4 @@
+package test;
+import java.io.IOException;import java.util.Arrays;import java.util.List;
+final class SourceClass {private Object methodToMove() throws IOException {List<TargetClass.StaticNested> nestedList = Arrays.asList(TargetClass.StaticNested.INSTANCE);for (TargetClass.StaticNested nested : nestedList) {nested.toString();if (TargetClass.StaticNested.targetField == null) {throw new IOException("Target field is null");}}return null;}}
+private class TargetClass {static class StaticNested {public static final StaticNested INSTANCE = new StaticNested();public static String targetField = "targetFieldValue";}}

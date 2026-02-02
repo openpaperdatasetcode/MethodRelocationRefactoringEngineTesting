@@ -1,0 +1,9 @@
+class SourceClass {
+	void m(TargetClass<String> target) {
+		String value = target.genericField;
+	}
+}
+
+class TargetClass<T> {
+	T genericField;
+}

@@ -1,0 +1,11 @@
+package test;
+import java.io.IOException;
+public class SourceClass extends ParentSource {// Member inner class (source_class feature)class SourceMemberInner {// Recursive inner class (for "source_inner_rec" method position)class SourceRecursiveInner {// Normal method to be refactoredprotected void processTarget(TargetClass targetParam) throws IOException {// SuperMethodReference (matches "numbers": "1")SuperMethodRef ref = super::parentMethod;ref.invoke();
+int count = 0;// Do statementdo {// Switch caseswitch (count) {case 0:// Variable call: access target instance fieldtargetParam.targetField = count;break;case 1:// Variable call: access target inner class methodtargetParam.innerClass.updateField(count);break;default:break;}count++;; // Empty statement} while (count < 3);}}}
+// Local inner class (source_class feature)void createLocalInner() {class SourceLocalInner {void callProcessMethod() throws IOException {SourceMemberInner.RecursiveInner inner = new SourceMemberInner().new SourceRecursiveInner();inner.processTarget(new TargetClass());}}new SourceLocalInner().callProcessMethod();}}
+// Parent class for SuperMethodReferenceclass ParentSource {protected void parentMethod() {}}
+// Functional interface for SuperMethodReference@FunctionalInterfaceinterface SuperMethodRef {void invoke();}
+public class TargetClass {int targetField;// Member inner class (target_class feature)TargetInner innerClass = new TargetInner();
+class TargetInner {void updateField(int val) {TargetClass.this.targetField = val * 2;}}}
+// Annotation for call_method's "attribute values of annotations" position@interface CallAnnotation {String value() default "default";}
+// call_method implementation (inner_class type)class CallerClass {@CallAnnotation(// pos: "the attribute values of annotations"value = "call via lambda")static class CallInner {// final modifier (matches call_method "modifier": "final")public final void callProcess(TargetClass target) throws IOException {SourceClass source = new SourceClass();SourceClass.SourceMemberInner.RecursiveInner inner = source.new SourceMemberInner().new SourceRecursiveInner();// super.methodName() (implicit super call in inner class)inner.processTarget(target);}}}

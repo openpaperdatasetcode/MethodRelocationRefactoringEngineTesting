@@ -1,0 +1,9 @@
+ class SourceClass {
+    public void methodToBeMoved(TargetClass target) {
+        System.out.println("public method");
+    }
+}
+
+ @interface TargetClass {
+    String value() default "default";
+}

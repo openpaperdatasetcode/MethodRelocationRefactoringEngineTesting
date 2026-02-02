@@ -1,0 +1,9 @@
+class sourceClass{
+    Target t;
+    protected void method(){
+        m();
+    }
+    private void m(){}
+}
+
+@interface Target{}

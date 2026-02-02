@@ -1,0 +1,10 @@
+package test.refactoring.movemethod;
+// Source record class (default modifier, same package)record SourceRecord(int outerField) {// Static nested class (source_class feature)static class StaticNestedClass {}
+// Member inner class (source_class feature)class SourceInnerRec {private int innerField = 10;
+// Overriding method (method.type) to be refactored (method_position: source_inner_rec)@Overrideint calculate(TargetRecord<String> targetParam) { // Contains target parameter (per_condition)// Super keywords (method.features)super.toString();// Uses outer this (method.features)int outerThisValue = SourceRecord.this.outerField();// Private VariableDeclarationStatement (diff_package_target pos, this.field + 2)private int localVar = this.innerField + 2;// Variable call (method.features)int varCallResult = localVar * outerThisValue;// Instance method call in Lambda expressions (method.features)Object lambdaCall = (() -> new SourceRecord(5).new SourceInnerRec().instanceMethod())();// Depends on inner class (method.features)StaticNestedClass nestedObj = new StaticNestedClass();return varCallResult;}
+// Overload method (overload_exist feature)int calculate(TargetRecord<Integer> targetParam, int extra) {return 0;}
+// Instance method for inner class call (method_feature: inner_class, outerInstance.new InnerClass().methodName())Object instanceMethod() {return new Object();}}}
+// Target record class (abstract modifier, same package)abstract record TargetRecord<T>(T targetField) { // Type parameter (target_feature)// Anonymous inner class (target_feature)Runnable anonymousInner = new Runnable() {@Overridepublic void run() {System.out.println("Anonymous inner class");}};
+// Target inner record to receive moved method (target class: target_inner_rec)record TargetInnerRec(int innerTargetField) {}}
+// Diff package class for VariableDeclarationStatement pospackage test.another;import test.refactoring.movemethod.TargetRecord;
+public class DiffPackageTargetUser {public void useTarget(TargetRecord<String> target) {// Reference for diff_package_target position}}

@@ -1,0 +1,14 @@
+class TargetClass {
+}
+
+class SubClass extends TargetClass {
+    static public void methodToBeMoved() {
+    }
+}
+
+class SourceClass {
+    TargetClass t;
+
+    void methodToBeMoved() {
+    }
+}

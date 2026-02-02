@@ -1,0 +1,17 @@
+import java.util.Objects;
+// Parent class for SourceClass to support 'extends' featureclass ParentSource {protected String parentProtectedField = "parent_protected_data";}
+// SourceClass: meets source_class specs (normal, public, extends ParentSource, permits subclasses, 2 member inner classes)sealed class SourceClass extends ParentSource permits SourceSubClass {// Target field: source contains target (per_condition)private TargetClass<String> targetField;
+// 1st member inner class (source_feature)protected class FirstInnerClass {// Instance method: meets method specs (instance, void, protected, source_inner)protected void processTarget(TargetClass<String> target) {SourceClass.this.targetField = target; // Assign target to source field
+// DoStatement: meets method_feature (private modifier, pos=diff_package_others, access super.field)int count = 0;do {// Access super protected field (access_outer_protected)String combined = SourceClass.super.parentProtectedField + "_" + count;// Variable call: call target's methodSourceClass.this.targetField.setData(combined);count++;} while (count < 3);
+// Switch case: meets method_featureswitch (target.getData().length()) {case 15:target.appendData("_case15");break;case 16:target.appendData("_case16");break;default:target.appendData("_default");break;}
+// Access instance field: access target's instance field via getterString targetData = SourceClass.this.targetField.getData();System.out.println("Target data after process: " + targetData);}}
+// 2nd member inner class (source_feature)protected class SecondInnerClass {public void useFirstInner(TargetClass<String> target) {FirstInnerClass firstInner = new FirstInnerClass();firstInner.processTarget(target); // Call the core instance method}}}
+// Subclass of SourceClass: for 'permits' featurefinal class SourceSubClass extends SourceClass {public void initTarget() {// Call target's generic method in constructor parameter list (call_method specs)TargetClass<String> target = new TargetClass<>(target -> target.superAppend("init_"));SecondInnerClass secondInner = new SecondInnerClass();secondInner.useFirstInner(target);}}
+// TargetClass: meets target_class specs (normal, private, type parameter, extends ParentTarget, local inner class)private class TargetClass<T> extends ParentTarget {private T data;
+// Constructor: accepts functional interface with target's generic method callpublic TargetClass(java.util.function.Function<TargetClass<T>, Object> func) {func.apply(this); // Execute call_method in constructor parameter list}
+// Generic method: meets call_method specs (private, generic, super.methodName)private Object superAppend(String suffix) {super.parentAppend(suffix); // Call super class methodthis.data = (T) (this.data + suffix);return this.data;}
+public void setData(T data) {this.data = data;// Local inner class: meets target_featureclass LocalDataProcessor {void validateData() {if (Objects.isNull(TargetClass.this.data)) {TargetClass.this.data = (T) "default_data";}}}new LocalDataProcessor().validateData();}
+public void appendData(String suffix) {this.data = (T) (this.data + suffix);}
+public T getData() {return this.data;}}
+// Parent class for TargetClass to support 'extends' featureclass ParentTarget {protected void parentAppend(String suffix) {// Super class method for target's super call}}
+// Test entrypublic class TestEntry {public static void main(String[] args) {SourceSubClass sourceSub = new SourceSubClass();sourceSub.initTarget(); // Trigger the entire flow (no_new_exception)}}

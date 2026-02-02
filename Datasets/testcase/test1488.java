@@ -1,0 +1,17 @@
+package test.refactor.movemethod;
+import java.lang.annotation.ElementType;import java.lang.annotation.Retention;import java.lang.annotation.RetentionPolicy;import java.lang.annotation.Target;import java.util.function.Supplier;
+@Retention(RetentionPolicy.RUNTIME)@Target(ElementType.METHOD)@interface TestAnnotation {String value() default "";}
+sealed class TargetClass permits TargetSubclass {public void targetMethod() {}
+public void processLocalInner() {class TargetLocalInner {public TargetClass getTargetInstance() {return new TargetClass();}}TargetLocalInner inner = new TargetLocalInner();inner.getTargetInstance();}}
+final class TargetSubclass extends TargetClass {}
+public class SourceClass {public static class StaticNestedClass {public static TargetClass overloadMethod(String str) {return new TargetClass();}
+public static void overloadMethod(TargetClass target) {} // Overload exist}
+public class SourceInnerRec {@TestAnnotation(value = "annotationValue") // numbers:1, modifier:public, exp:Annotationpublic final static void staticRefactorMethod(TargetClass targetParam) throws IllegalArgumentException { // requires_throws// Uses outer thisSourceClass outerThis = SourceClass.this;
+// Do statementint count = 0;do {// Variable callStaticNestedClass.overloadMethod("test");targetParam.processLocalInner();count++;} while (count < 1);
+// Local inner class (source_class feature)class SourceLocalInner {private TargetClass callInnerMethod() {return targetParam;}}
+// Call_method: inner_class, private, target_feature:normal/instanceReference::methodName, pos:annotation attribute valuesSourceLocalInner localInner = new SourceLocalInner();Supplier<TargetClass> methodRef = localInner::callInnerMethod;TestAnnotation annotation = SourceInnerRec.class.getMethod("staticRefactorMethod", TargetClass.class).getAnnotation(TestAnnotation.class);if (annotation.value().equals("annotationValue")) {TargetClass result = methodRef.get();assert result != null : "Call method return check";}
+// Per_condition: contains target parameterif (targetParam == null) {throw new IllegalArgumentException("Target parameter cannot be null");}}}
+public static void main(String[] args) {try {SourceClass source = new SourceClass();SourceClass.SourceInnerRec innerRec = source.new SourceInnerRec();TargetClass target = new TargetSubclass();SourceInnerRec.staticRefactorMethod(target);} catch (IllegalArgumentException | NoSuchMethodException | SecurityException e) {e.printStackTrace();}}}
+// Test case classpublic class MoveMethodTest5154 {public static void main(String[] args) {SourceClass source = new SourceClass();SourceClass.SourceInnerRec innerRec = source.new SourceInnerRec();TargetClass target = new TargetSubclass();
+try {SourceInnerRec.staticRefactorMethod(target);assert true : "Static refactor method executed successfully";} catch (IllegalArgumentException e) {assert false : "Unexpected exception: " + e.getMessage();} catch (NoSuchMethodException | SecurityException e) {assert false : "Annotation access error: " + e.getMessage();}
+// Verify overload existsStaticNestedClass.overloadMethod(target);TargetClass overloadResult = StaticNestedClass.overloadMethod("test");assert overloadResult != null : "Overload method return check";}}

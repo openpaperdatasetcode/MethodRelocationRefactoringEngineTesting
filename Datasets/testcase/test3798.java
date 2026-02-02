@@ -1,0 +1,19 @@
+import java.util.Objects;
+// TargetRecord: public record class, with anonymous inner class (meets target_class specs)public record TargetRecord(int id, String content) {// Anonymous inner class (target_feature: handles content transformation)public static final ContentProcessor CONTENT_PROCESSOR = new ContentProcessor() {@Overridepublic String process(String content) {return content.trim().toUpperCase();}};
+// Functional interface for anonymous inner class@FunctionalInterfacepublic interface ContentProcessor {String process(String content);}
+// Method for variable callpublic String getProcessedContent() {return CONTENT_PROCESSOR.process(this.content()); // Access this.field (content)}
+// Overloaded constructor (for constructor invocation feature)public TargetRecord(int id) {this(id, "default_content");}}
+// SourceRecord: public record class, same package as target, with 2 anonymous inner classes (meets source_class specs)// Source contains target field (per_condition: holds TargetRecord as a component)public record SourceRecord(String name, TargetRecord sourceTargetField) {// Inner class for method_position: source_innerpublic class SourceInner {// Overloading method 1 (base type return: int)public final int processTarget(int multiplier) {return processTarget(sourceTargetField, multiplier);}
+// Overloading method 2 (meets method specs: overloading, base type return, final, source_inner)public final int processTarget(TargetRecord target, int multiplier) {Objects.requireNonNull(target, "Target cannot be null");
+// VariableDeclarationStatement: private modifier effect, pos=diff_package_others, access this.field (1)// Access target's "this.field" (content via content() accessor)private String targetContent = target.getProcessedContent();
+// Synchronized statement (method_feature)synchronized (target) {// Constructor invocation: create new TargetRecord instanceTargetRecord newTarget = new TargetRecord(target.id() + 1, targetContent + "_new");
+// Switch case (method_feature)int processedId;switch (target.id() % 3) {case 0:processedId = target.id() * multiplier;break;case 1:processedId = (target.id() + newTarget.id()) * multiplier;break;default:processedId = (target.id() + 5) * multiplier;break;}
+// Variable call: invoke target's method to verifyString verifiedContent = newTarget.getProcessedContent();assert verifiedContent.startsWith(targetContent) : "Content verification failed";
+return processedId; // Base type return (int), no_new_exception}}}
+// 1st anonymous inner class (source_feature: Runnable for initialization)private final Runnable initRunner = new Runnable() {@Overridepublic void run() {SourceInner inner = new SourceInner();// Trigger overloaded method call (no_new_exception)inner.processTarget(2);}};
+// 2nd anonymous inner class (source_feature: Function for content calculation)private final java.util.function.Function<TargetRecord, Integer> contentLengthFunc = new java.util.function.Function<>() {@Overridepublic Integer apply(TargetRecord target) {SourceInner inner = new SourceInner();int base = inner.processTarget(target, 1);return base + target.content().length();}};
+// Initialize anonymous inner class logicpublic void init() {initRunner.run();}
+// Calculate content length via 2nd anonymous inner classpublic int calculateContentLength() {return contentLengthFunc.apply(sourceTargetField);}
+// Test entrypublic static void main(String[] args) {// Create target instance (constructor invocation)TargetRecord target = new TargetRecord(10, " test_source_target ");// Create source instance (contains target field: per_condition)SourceRecord source = new SourceRecord("TestSource", target);
+source.init();int result1 = source.new SourceInner().processTarget(3);int result2 = source.calculateContentLength();
+System.out.println("Process Result 1: " + result1);System.out.println("Content Length Result: " + result2);}}

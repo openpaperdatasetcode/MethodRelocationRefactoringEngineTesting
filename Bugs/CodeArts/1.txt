@@ -1,0 +1,8 @@
+interface A {
+
+    public void m(B b);
+}
+
+class B {
+
+}

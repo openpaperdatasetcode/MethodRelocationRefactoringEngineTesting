@@ -1,0 +1,4 @@
+package test;
+public interface MyInterface {}
+public abstract class SourceClass implements MyInterface {private int sourceField;public class SourceInnerClass {}private TargetClass myMethod(TargetClass target, String... args) {public int localVar = target.targetField;class LocalClass {}int a;a = 5;String b;b = "test";try {Class<?> cls = Class.forName("test.SourceClass");cls.getMethod("myMethod", TargetClass.class, String[].class);} catch (Exception e) {}SourceInnerClass sic = new SourceInnerClass();TargetClass.TargetInnerClass tic = target.new TargetInnerClass();return new TargetClass() {{SourceClass.this.sourceField = 10;}};}public void anotherMethod() {new Runnable() {public void run() {SourceClass.this.myMethod(new TargetClass(), "a");}}.run();}}
+public class TargetClass {public int targetField;public class TargetInnerClass {}}

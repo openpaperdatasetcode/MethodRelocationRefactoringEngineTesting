@@ -1,0 +1,10 @@
+package test;
+import java.lang.annotation.Retention;import java.lang.annotation.RetentionPolicy;
+@Retention(RetentionPolicy.RUNTIME)@interface RefactorTestAnnotation {}
+public class SourceClass {// Member inner class (source_class feature)protected class MemberInner extends SuperInnerClass {// Protected normal method (call_method: inner_class type)@Overrideprotected Object callInnerMethod(TargetClass target) {super.callInnerMethod(target); // super.methodName(arguments)return target;}}
+// Final instance method (matches method requirements)@RefactorTestAnnotation // Has annotationpublic final void instanceMethod(TargetClass target) { // Contains target parameter (meets per_condition)// Try statementtry {// Type declaration statementTargetClass.LocalInnerWrapper wrapper = target.createLocalInnerWrapper();// Variable callvariableCall(target);
+// Anonymous inner class (source_class feature)Runnable runnable = new Runnable() {@Overridepublic void run() {MemberInner inner = new MemberInner();inner.callInnerMethod(target);}};runnable.run();} catch (Exception e) {// Exception handling statements (pos for call_method)MemberInner inner = new MemberInner();Object result = inner.callInnerMethod(target);}// No new exception thrown}
+private void variableCall(TargetClass target) {TargetClass localTarget = target;localTarget.createLocalInnerWrapper();}}
+class SuperInnerClass {// Super class method for call_method's super invocationprotected Object callInnerMethod(TargetClass target) {return null;}}
+public class TargetClass {// Local inner class (target_class feature)public LocalInnerWrapper createLocalInnerWrapper() {class LocalInner {Object getValue() {return TargetClass.this;}}return new LocalInnerWrapper(new LocalInner().getValue());}
+// Wrapper for local inner class instancepublic static class LocalInnerWrapper {private final Object innerValue;public LocalInnerWrapper(Object value) {this.innerValue = value;}}}

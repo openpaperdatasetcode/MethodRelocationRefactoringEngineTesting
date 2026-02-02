@@ -1,0 +1,7 @@
+package test;
+record SourceRecord(String content) {// First local inner class (source feature)public TargetRecord createFirstInner() {class FirstLocalInner {public TargetRecord process(TargetRecord target) {return target;}}return new FirstLocalInner().process(new TargetRecord("init"));}
+// Second local inner class (source feature)public TargetRecord instanceMethod() {class SecondLocalInner {// Source inner recursive class (method_position: source_inner_rec)public class SourceInnerRec {// Instance method (protected access modifier, returns TargetClass Type)protected TargetRecord innerRecMethod(TargetRecord targetParam) {// Switch caseswitch (targetParam.value().length()) {case 3:targetParam.createTargetInner().variableCall();break;default:TargetRecord.staticMethod(targetParam);}return targetParam;}}}
+SecondLocalInner local = new SecondLocalInner();SourceInnerRec innerRec = local.new SourceInnerRec();return innerRec.innerRecMethod(new TargetRecord(content));}}
+public record TargetRecord(String value) {// Local inner class (target_feature)public TargetLocalInner createTargetInner() {class TargetLocalInner {public void variableCall() {}}return new TargetLocalInner();}
+// Call method (target, public, target_feature: static, instanceReference.methodName(arguments), pos: constructor parameter list)public static void staticMethod(TargetRecord target) {}
+// Constructor with call method in parameter list (simulated via initialization)public TargetRecord(String value) {this.value = value;staticMethod(this); // Call method invoked in constructor context}}

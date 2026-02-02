@@ -1,0 +1,15 @@
+package test.refactor.movemethod;
+// Parent class for source_class extends featureclass ParentClass {protected int parentField = 10;protected int parentMethod() {return parentField * 2;}}
+// Interface for source_class implements featureinterface ActionInterface {void execute();}
+// Target class (public modifier, target_feature: anonymous inner class)public class TargetClass {// Target field (source contains this field - per_condition)public String targetField = "targetValue";
+// Target_inner_rec: recursive inner structurepublic class TargetInner {public class TargetInnerRecursive {public void useTargetField() {System.out.println(targetField);}}}
+// Target_feature: anonymous inner classpublic ActionInterface createAnonymousAction() {return new ActionInterface() {@Overridepublic void execute() {System.out.println("Anonymous action executed: " + targetField);}};}}
+// Source class (private modifier, same package, extends + implements + member inner + local inner class)private class SourceClass extends ParentClass implements ActionInterface {// Feature: member inner class (source_inner - method position)public class SourceMemberInner {// Method to be refactored: instance, public, void return, in source_innerpublic void processTarget(TargetClass target) {// Per_condition: source contains target's fieldString fieldValue = target.targetField;
+// Feature: with_bounds (generic with bounds)class BoundedGeneric<T extends ParentClass> {T boundedObj;public BoundedGeneric(T obj) {this.boundedObj = obj;}public int getValue() {return boundedObj.parentField;}}BoundedGeneric<SourceClass> bounded = new BoundedGeneric<>(this);
+// Feature: if statement + NullPointerExceptionif (target == null) {throw new NullPointerException("Target cannot be null");}
+// Feature: variable call + target_inner_rec usageTargetClass.TargetInner targetInner = target.new TargetInner();TargetClass.TargetInner.TargetInnerRecursive recursive = targetInner.new TargetInnerRecursive();recursive.useTargetField();
+// Feature: local inner class (source feature)class LocalInner {public void invokeCallMethod() {// Call inner_class method (call_method)int result = callInStaticBlock();System.out.println("LocalInner: " + result);}}new LocalInner().invokeCallMethod();
+try {// Variable call with anonymous inner class from targetActionInterface action = target.createAnonymousAction();action.execute();} catch (Exception e) {// Feature: no_new_exception (rethrow without wrapping)throw e;}}
+// call_method: inner_class type, private modifier, instance, super.methodName(), in Static code blocksprivate int callInStaticBlock() {static {System.out.println("Static code block - call_method pos");}// target_feature: super.methodName()return super.parentMethod();}}
+@Overridepublic void execute() {SourceMemberInner inner = new SourceMemberInner();TargetClass target = new TargetClass();inner.processTarget(target);}}
+// Test classpublic class MoveMethodTest5241 {public static void main(String[] args) {SourceClass source = new SourceClass();source.execute();}}

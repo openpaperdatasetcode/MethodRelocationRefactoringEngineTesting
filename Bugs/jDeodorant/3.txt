@@ -1,0 +1,17 @@
+public class SourceClass {
+	TargetClass targetClass;
+    public void methodToBeMoved() {
+    	targetClass.m1();
+    	targetClass.m2();
+        InnerClass innerClass = new InnerClass();
+        innerClass.innerMethod();
+    }
+    class InnerClass{
+        void innerMethod(){}
+    }
+}
+public class TargetClass {
+	public void m1() {}
+	public void m2() {}
+}
+

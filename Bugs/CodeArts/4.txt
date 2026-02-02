@@ -1,0 +1,15 @@
+class TargetClass {
+    static void methodToBeMoved(Number n) {
+    }
+
+    public static void main(String[] args) {
+        long n = 0;
+        methodToBeMoved(n);
+    }
+}
+
+class SourceClass {
+    TargetClass test;
+    void methodToBeMoved(Long i) {
+    }
+}
