@@ -34,15 +34,21 @@ All bugs identified in the case study are explained in detail so that they can b
     
 **2 IntelliJ IDEA**
 
-•Open IntelliJ IDEA, click File > Open in the top menu bar (or Import Project for the initial startup interface).
+• Open IntelliJ IDEA, click File > Open in the top menu bar (or Import Project for the initial startup interface).
 
-•Select the reproduction package/plugin project folder in the cloned repository and click OK.
+• Select the reproduction package/plugin project folder in the cloned repository and click OK.
 
-•In the import prompt, select Import project from external model (if needed) or keep the default, and click Next until the end.
+• In the import prompt, select Import project from external model (if needed) or keep the default, and click Next until the end.
 
-•Go to File > Project Structure > Project SDK, select JDK 17 as the project SDK, and click Apply > OK.
+• Go to File > Project Structure > Project SDK, select JDK 17 as the project SDK, and click Apply > OK.
 
-•Wait for IntelliJ IDEA to index the project and download relevant dependencies.
+• Wait for IntelliJ IDEA to index the project and download relevant dependencies.
 
 ###• Open dataset：[Dataset](https://github.com/openpaperdatasetcode/MethodRelocationRefactoringEngineTesting/tree/main/Datasets).
+
+##  **3.SkeletonGeneration**
+
+• Open PyCharm and locate the randomSeclectFeature.py file in the project explorer.
+
+• Right-click anywhere in the editor area and select Run 'randomSeclectFeature'.
 
